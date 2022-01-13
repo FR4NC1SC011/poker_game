@@ -6,7 +6,7 @@ use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct Card {
     value: Values,
     suit: Suits,
@@ -19,7 +19,7 @@ struct Deck {
 }
 
 
-#[derive(EnumIter, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(EnumIter, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Suits {
     Clubs,
     Hearts,
@@ -28,21 +28,21 @@ enum Suits {
 }
 
 
-#[derive(EnumIter, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(EnumIter, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Values {
-    Ace,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine,
-    Ten,
-    Jack,
-    Queen,
-    King,
+    Ace = 1,
+    Two= 2,
+    Three = 3 ,
+    Four = 4,
+    Five = 5,
+    Six = 6 ,
+    Seven = 7,
+    Eight = 8,
+    Nine = 9 ,
+    Ten = 10,
+    Jack = 11,
+    Queen = 12,
+    King = 13,
 }
 
 
@@ -55,67 +55,14 @@ enum PokerHands {
 }
 
 fn main() {
-    //let mut deck: Vec<Card> = Vec::new();
-    //let mut hand: Vec<Card> = Vec::new();
 
     /*
-    for s in Suits::iter() {
-        for v in Values::iter() {
-            let card = Card::new(v, s);
-            deck.push(card);
-        }
-    }
-    */
-
     let mut deck: Deck = Deck::new();
     let mut hand: Deck = Deck::new_hand(&mut deck);
-
-
-    /*
-    for _ in 0..5 {
-        let index = (random::<f32>() * deck.hand.len() as f32).floor() as usize;
-        hand.push(deck.hand[index]);
-        deck.hand.remove(index);
-    }
-    */
 
     for x in &hand.hand {
         x.print_card();
     }
-
-    //NOTE: Upgrade this piece of code
-    /*
-    println!("Cards to change: ");
-    let reader = io::stdin();
-    let mut cards_to_change: Vec<i32> =
-        reader.lock()
-              .lines().next().unwrap().unwrap()
-              .split(' ').map(|s| s.trim())
-              .filter(|s| !s.is_empty())
-              .map(|s| s.parse().unwrap())
-              .collect();
-
-    cards_to_change.truncate(2);
-
-
-    let mut z = 0;
-    for x in &cards_to_change {
-
-        if x > &4 {
-            unimplemented!();
-        }
-
-        let i = x - z;
-        hand.hand.remove(i.try_into().unwrap());
-        z += 1;
-    }
-
-    for _ in 0..cards_to_change.len() {
-        let index = (random::<f32>() * deck.hand.len() as f32).floor() as usize;
-        hand.hand.push(deck.hand[index]);
-        deck.hand.remove(index);
-    }
-    */
 
     hand = Deck::change_cards(hand, &mut deck);
 
@@ -123,8 +70,30 @@ fn main() {
         x.print_card();
     }
 
-    let mut points = PokerHands::n_of_a_kind(hand);
+    let mut points = PokerHands::n_of_a_kind(&hand);
     println!("Total Points: {}", points);
+
+    let mut points = PokerHands::is_straight(&mut hand);
+    */
+
+    let card1: Card = Card::new(Values::King, Suits::Clubs);
+    let card2: Card = Card::new(Values::Jack, Suits::Clubs);
+    let card3: Card = Card::new(Values::Queen, Suits::Clubs);
+    let card4: Card = Card::new(Values::Ten, Suits::Clubs);
+    let card5: Card = Card::new(Values::Ace, Suits::Clubs);
+
+    let mut x: Vec<Card> = Vec::new();
+    x.push(card1);
+    x.push(card2);
+    x.push(card3);
+    x.push(card4);
+    x.push(card5);
+
+    let mut hand: Deck = Deck { hand: x };
+
+    let points = PokerHands::is_straight(&mut hand);
+    println!("{:?}", hand);
+    println!("{}", points);
 
 }
 
@@ -213,11 +182,11 @@ impl Deck {
 
 
 impl PokerHands {
-    fn n_of_a_kind(hand: Deck) -> u32 {
+    fn n_of_a_kind(hand: &Deck) -> u32 {
         //NOTE: Optimize this code
         //let (mut a, mut b, mut c_c, mut d, mut e, mut f, mut g, mut h, mut i, mut j, mut k, mut l, mut m) = (0, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0);
         let mut v = vec![0; 13];
-        for c in hand.hand {
+        for c in &hand.hand {
             match c.value {
                 Values::Ace => {
                     v[0] += 1;
@@ -292,6 +261,34 @@ impl PokerHands {
         points
     }
 
+    fn is_straight(hand: &mut Deck) -> u32 {
+        let mut points: u32 = 0;
+        let mut straight = true;
+
+        hand.hand.sort();
+
+        if hand.hand[4].value == Values::King && hand.hand[0].value == Values::Ace {
+            for i in 2..4 {
+                hand.hand[i].print_card();
+                if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
+                    straight = false;
+                }
+            }
+        } else {
+            for i in 1..5 {
+                if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
+                    straight = false;
+                }
+            }
+        }
+
+        if straight {
+            points = 10;
+        }
+
+        points
+    }
+
 }
 
 
@@ -344,11 +341,11 @@ mod tests {
 
     #[test]
     fn is_pair() {
-        let mut card1: Card = Card::new(Values::Ace, Suits::Clubs);
-        let mut card2: Card = Card::new(Values::Ace, Suits::Clubs);
-        let mut card3: Card = Card::new(Values::Two, Suits::Clubs);
-        let mut card4: Card = Card::new(Values::Three, Suits::Clubs);
-        let mut card5: Card = Card::new(Values::Four, Suits::Clubs);
+        let card1: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card2: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card3: Card = Card::new(Values::Two, Suits::Clubs);
+        let card4: Card = Card::new(Values::Three, Suits::Clubs);
+        let card5: Card = Card::new(Values::Four, Suits::Clubs);
 
         let mut x: Vec<Card> = Vec::new();
         x.push(card1);
@@ -357,20 +354,86 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
+        let hand: Deck = Deck { hand: x };
         println!("{:?}", hand);
 
-        let mut points = PokerHands::n_of_a_kind(hand);
+        let points = PokerHands::n_of_a_kind(&hand);
         assert_eq!(points, 1);
     }
 
     #[test]
     fn is_two_pair() {
-        let mut card1: Card = Card::new(Values::Ace, Suits::Clubs);
-        let mut card2: Card = Card::new(Values::Ace, Suits::Clubs);
-        let mut card3: Card = Card::new(Values::Two, Suits::Clubs);
-        let mut card4: Card = Card::new(Values::Two, Suits::Clubs);
-        let mut card5: Card = Card::new(Values::Four, Suits::Clubs);
+        let card1: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card2: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card3: Card = Card::new(Values::Two, Suits::Clubs);
+        let card4: Card = Card::new(Values::Two, Suits::Clubs);
+        let card5: Card = Card::new(Values::Four, Suits::Clubs);
+
+        let mut x: Vec<Card> = Vec::new();
+        x.push(card1);
+        x.push(card2);
+        x.push(card3);
+        x.push(card4);
+        x.push(card5);
+
+        let hand: Deck = Deck { hand: x };
+        println!("{:?}", hand);
+
+        let points = PokerHands::n_of_a_kind(&hand);
+        assert_eq!(points, 3);
+    }
+
+    #[test]
+    fn is_three_of_a_kind() {
+        let card1: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card2: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card3: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card4: Card = Card::new(Values::Two, Suits::Clubs);
+        let card5: Card = Card::new(Values::Four, Suits::Clubs);
+
+        let mut x: Vec<Card> = Vec::new();
+        x.push(card1);
+        x.push(card2);
+        x.push(card3);
+        x.push(card4);
+        x.push(card5);
+
+        let hand: Deck = Deck { hand: x };
+        println!("{:?}", hand);
+
+        let points = PokerHands::n_of_a_kind(&hand);
+        assert_eq!(points, 5);
+    }
+
+    #[test]
+    fn is_poker() {
+        let card1: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card2: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card3: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card4: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card5: Card = Card::new(Values::Four, Suits::Clubs);
+
+        let mut x: Vec<Card> = Vec::new();
+        x.push(card1);
+        x.push(card2);
+        x.push(card3);
+        x.push(card4);
+        x.push(card5);
+
+        let hand: Deck = Deck { hand: x };
+        println!("{:?}", hand);
+
+        let points = PokerHands::n_of_a_kind(&hand);
+        assert_eq!(points, 20);
+    }
+
+    #[test]
+    fn is_straight() {
+        let card1: Card = Card::new(Values::Ace, Suits::Clubs);
+        let card2: Card = Card::new(Values::Two, Suits::Clubs);
+        let card3: Card = Card::new(Values::Three, Suits::Clubs);
+        let card4: Card = Card::new(Values::Four, Suits::Clubs);
+        let card5: Card = Card::new(Values::Five, Suits::Clubs);
 
         let mut x: Vec<Card> = Vec::new();
         x.push(card1);
@@ -382,8 +445,32 @@ mod tests {
         let mut hand: Deck = Deck { hand: x };
         println!("{:?}", hand);
 
-        let mut points = PokerHands::n_of_a_kind(hand);
-        assert_eq!(points, 3);
+        let points = PokerHands::is_straight(&mut hand);
+        assert_eq!(points, 10);
     }
+
+    #[test]
+    fn is_straight_v2() {
+        let card1: Card = Card::new(Values::King, Suits::Clubs);
+        let card2: Card = Card::new(Values::Jack, Suits::Clubs);
+        let card3: Card = Card::new(Values::Queen, Suits::Clubs);
+        let card4: Card = Card::new(Values::Ten, Suits::Clubs);
+        let card5: Card = Card::new(Values::Ace, Suits::Clubs);
+
+        let mut x: Vec<Card> = Vec::new();
+        x.push(card1);
+        x.push(card2);
+        x.push(card3);
+        x.push(card4);
+        x.push(card5);
+
+        let mut hand: Deck = Deck { hand: x };
+        println!("{:?}", hand);
+
+        let points = PokerHands::is_straight(&mut hand);
+        assert_eq!(points, 10);
+    }
+
+
 
 }
