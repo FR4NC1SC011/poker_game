@@ -14,7 +14,7 @@ extern crate clap;
 
 fn main() {
 
-    let matches = clap_app!(poke_game =>
+    let _matches = clap_app!(poke_game =>
         (version: "1.0")
         (author: "Francisco O. <fcootzg@gmail.com>")
         (about: "Simple Poker Game")
