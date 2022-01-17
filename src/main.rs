@@ -56,7 +56,7 @@ fn main() {
         println!("Keep Playing? yes/no");
         let mut play = String::new();
         io::stdin()
-            .read_line(&mut number)
+            .read_line(&mut play)
             .expect("Failed to read input");
 
         if play == "no\n" {

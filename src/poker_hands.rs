@@ -8,7 +8,11 @@ pub enum PokerHands {
     TwoPair = 3,
     ThreeOfAKind = 5,
     Straight = 10,
+    FullHouse = 13,
+    Flush = 15,
     Poker = 20,
+    StraightFlush = 25,
+    RoyalFlush = 30,
 }
 
 
@@ -62,6 +66,8 @@ impl PokerHands {
         }
 
         let mut n_pairs: u8 = 0;
+        let mut three_kind: bool = false;
+
         let mut points: u32 = 0;
 
         for j in v {
@@ -71,7 +77,8 @@ impl PokerHands {
                  },
                 3 => {
                     println!("Three of a kind");
-                    points += PokerHands::ThreeOfAKind as u32;
+                    three_kind = true;
+                    //points += PokerHands::ThreeOfAKind as u32;
                 },
                 4 => {
                     println!("Poker");
@@ -82,12 +89,18 @@ impl PokerHands {
             }
         }
 
-        if n_pairs == 1 {
-            println!("Pair");
-            points += PokerHands::Pair as u32;
+        if three_kind && n_pairs == 1 {
+            println!("Full House");
+            points += PokerHands::FullHouse as u32;
+        } else if three_kind {
+            println!("Three Of a Kind");
+            points += PokerHands::ThreeOfAKind as u32;
         } else if n_pairs == 2 {
             println!("Two Pairs");
             points += PokerHands::TwoPair as u32;
+        } else if n_pairs == 1 {
+            println!("Pair");
+            points += PokerHands::Pair as u32;
         }
 
 
@@ -95,32 +108,52 @@ impl PokerHands {
     }
 
     pub fn is_straight(hand: &mut Deck) -> u32 {
-        let mut points: u32 = 0;
+
+        let mut flush: bool = true;
         let mut straight = true;
+        let mut is_royal = true;
 
         hand.hand.sort();
 
+        // IS ROYAL STRAIGHT
         if hand.hand[4].value == Values::King && hand.hand[0].value == Values::Ace {
+            straight = false;
             for i in 2..4 {
                 hand.hand[i].print_card();
                 if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
-                    straight = false;
+                    is_royal = false;
+                    break;
                 }
             }
         } else {
+            is_royal = false;
             for i in 1..5 {
                 if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
                     straight = false;
+                    break;
                 }
             }
         }
 
-        if straight {
-            points += PokerHands::Straight as u32;
-            println!("Straight");
+            for c in 0..5 {
+                let suit = hand.hand[0].suit;
+                if hand.hand[c].suit != suit {
+                    flush = false;
+                }
+            }
+
+        if is_royal && flush {
+            return PokerHands::RoyalFlush as u32;
+        } else if straight && flush {
+            return PokerHands::StraightFlush as u32;
+        } else if straight || is_royal {
+            return PokerHands::Straight as u32;
+        } else if flush {
+            return PokerHands::Flush as u32;
+        } else {
+            0
         }
 
-        points
     }
 
 }
