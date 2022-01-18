@@ -76,7 +76,6 @@ impl PokerHands {
                     n_pairs += 1;
                  },
                 3 => {
-                    println!("Three of a kind");
                     three_kind = true;
                     //points += PokerHands::ThreeOfAKind as u32;
                 },

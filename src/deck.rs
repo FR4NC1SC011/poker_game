@@ -55,12 +55,13 @@ impl Deck {
                 .map(|s| s.parse().unwrap())
                 .collect();
 
-        cards_to_change.truncate(2);            // Mantains the len of the vector in 3   ---  0,1,2
+        cards_to_change.truncate(3);            // Mantains the len of the vector in 3
+        cards_to_change.sort();
 
 
         let mut z = 0;
         for x in &cards_to_change {
-            if x > &4 {
+            if x > &4 || x < &0 {
                 unimplemented!();
             }
 
