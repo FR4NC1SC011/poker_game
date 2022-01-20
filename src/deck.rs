@@ -42,24 +42,7 @@ impl Deck {
         player_hand
     }
 
-    pub fn change_cards(mut hand: Deck, deck: &mut Deck, mut cards_to_change: Vec<i32>) -> Self {      // If the user wants to change the cards of the hand
-        println!("Cards to change: ");
-        let reader = io::stdin();
-
-        // Read user input to vector in the form "%d %d %d ..." -> eg: 1 2 3
-        /*
-        let mut cards_to_change: Vec<i32> =
-            reader.lock()
-                .lines().next().unwrap().unwrap()
-                .split(' ').map(|s| s.trim())
-                .filter(|s| !s.is_empty())
-                .map(|s| s.parse().unwrap())
-                .collect();
-        */
-
-        cards_to_change.truncate(3);            // Mantains the len of the vector in 3
-        cards_to_change.sort();
-
+    pub fn change_cards(mut hand: Deck, deck: &mut Deck, cards_to_change: Vec<i32>) -> Self {      // If the user wants to change the cards of the hand
         for x in &cards_to_change {
             if x > &4 || x < &0 {
                 unimplemented!();

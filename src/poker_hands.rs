@@ -17,7 +17,7 @@ pub enum PokerHands {
 
 
 impl PokerHands {
-    pub fn n_of_a_kind(hand: &Deck) -> u32 {
+    pub fn n_of_a_kind(hand: &Deck) -> u16 {
         //NOTE: Optimize this code
         //let (mut a, mut b, mut c_c, mut d, mut e, mut f, mut g, mut h, mut i, mut j, mut k, mut l, mut m) = (0, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0);
         let mut v = vec![0; 13];
@@ -68,7 +68,7 @@ impl PokerHands {
         let mut n_pairs: u8 = 0;
         let mut three_kind: bool = false;
 
-        let mut points: u32 = 0;
+        let mut points: u16 = 0;
 
         for j in v {
             match j {
@@ -81,7 +81,7 @@ impl PokerHands {
                 },
                 4 => {
                     println!("Poker");
-                    points += PokerHands::Poker as u32;
+                    points += PokerHands::Poker as u16;
 
                 },
                 _ => (),
@@ -90,23 +90,23 @@ impl PokerHands {
 
         if three_kind && n_pairs == 1 {
             println!("Full House");
-            points += PokerHands::FullHouse as u32;
+            points += PokerHands::FullHouse as u16;
         } else if three_kind {
             println!("Three Of a Kind");
-            points += PokerHands::ThreeOfAKind as u32;
+            points += PokerHands::ThreeOfAKind as u16;
         } else if n_pairs == 2 {
             println!("Two Pairs");
-            points += PokerHands::TwoPair as u32;
+            points += PokerHands::TwoPair as u16;
         } else if n_pairs == 1 {
             println!("Pair");
-            points += PokerHands::Pair as u32;
+            points += PokerHands::Pair as u16;
         }
 
 
         points
     }
 
-    pub fn is_straight(hand: &mut Deck) -> u32 {
+    pub fn is_straight(hand: &mut Deck) -> u16 {
 
         let mut flush: bool = true;
         let mut straight = true;
@@ -142,13 +142,13 @@ impl PokerHands {
             }
 
         if is_royal && flush {
-            return PokerHands::RoyalFlush as u32;
+            return PokerHands::RoyalFlush as u16;
         } else if straight && flush {
-            return PokerHands::StraightFlush as u32;
+            return PokerHands::StraightFlush as u16;
         } else if straight || is_royal {
-            return PokerHands::Straight as u32;
+            return PokerHands::Straight as u16;
         } else if flush {
-            return PokerHands::Flush as u32;
+            return PokerHands::Flush as u16;
         } else {
             0
         }
