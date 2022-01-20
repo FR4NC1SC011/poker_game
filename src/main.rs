@@ -1,7 +1,8 @@
 use crate::deck::*;
 use crate::poker_hands::*;
-use std::io;
+//use std::io;
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
+use std::io::{self, BufRead};
 
 mod card;
 mod deck;
@@ -20,9 +21,12 @@ fn main() {
         (about: "Simple Poker Game")
         ).get_matches();
 
+
+    let reader = io::stdin();
+
     // create a new DB with AutoDum, meaning every change is written to the file,
     // and with Json serialization
-    let mut db = load_or_new();
+    let mut db = load_or_new("local.db");
 
     let mut deck: Deck = Deck::new();
 
@@ -43,22 +47,24 @@ fn main() {
 
         let mut hand: Deck = Deck::new_hand(&mut deck);
 
-        let mut i = 0;
-        for x in &hand.hand {
-            print!("{}. ", i);
-            x.print_card();
-            i += 1;
-        }
+        Deck::print_hand(&hand);
 
-        hand = Deck::change_cards(hand, &mut deck);
+        // Read user input to vector in the form "%d %d %d ..." -> eg: 1 2 3
+        let cards_to_change: Vec<i32> =
+            reader.lock()
+                .lines().next().unwrap().unwrap()
+                .split(' ').map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+                .map(|s| s.parse().unwrap())
+                .collect();
 
-        for x in &hand.hand {
-            x.print_card();
-        }
+        hand = Deck::change_cards(hand, &mut deck, cards_to_change);
 
-        let mut points = PokerHands::n_of_a_kind(&hand);
+        Deck::print_hand(&hand);
+
+        let mut points = PokerHands::is_straight(&mut hand);
         if points == 0 {
-            points = PokerHands::is_straight(&mut hand);
+            points = PokerHands::n_of_a_kind(&hand);
         }
 
         score += points;
@@ -81,38 +87,24 @@ fn main() {
     }
 }
 
-/*
-pub fn load_or_new<P: AsRef<Path> + Copy>(
-    db_path: P,
-    dump_policy: PickleDbDumpPolicy,
-    serialization_method: SerializationMethod,
-) -> PickleDb {
-    let load = PickleDb::load(db_path, dump_policy, serialization_method);
-    return match load {
-        Ok(load) => load,
-        Err(_) => PickleDb::new(db_path, dump_policy, serialization_method),
-    };
-}
-*/
-
-pub fn load_or_new() -> PickleDb {
+pub fn load_or_new(db_name: &str) -> PickleDb {
     let mut load = PickleDb::load(
-                            "example.db",
+                            db_name,
                             PickleDbDumpPolicy::AutoDump,
                             SerializationMethod::Json);
     return match load {
         Ok(load) => load,
         Err(_) => {
-            create_db()
+            create_db(db_name)
         }
     };
 
 
 }
 
-fn create_db() -> PickleDb {
+fn create_db(db_name: &str) -> PickleDb {
     let mut new_db = PickleDb::new(
-        "example.db",
+        db_name,
         PickleDbDumpPolicy::AutoDump,
         SerializationMethod::Json,
     );

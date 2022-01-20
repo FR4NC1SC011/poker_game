@@ -6,7 +6,7 @@ mod tests {
     use crate::poker_hands::*;
 
     #[test]
-    fn is_pair() {
+    fn is_pair_of_ace() {
         let card1: Card = Card::new(Values::Ace, Suits::Clubs);
         let card2: Card = Card::new(Values::Ace, Suits::Clubs);
         let card3: Card = Card::new(Values::Two, Suits::Clubs);
@@ -28,12 +28,12 @@ mod tests {
     }
 
     #[test]
-    fn is_pair_v2() {
+    fn is_pair_of_five() {
         let card1: Card = Card::new(Values::King, Suits::Clubs);
         let card2: Card = Card::new(Values::Jack, Suits::Hearts);
-        let card3: Card = Card::new(Values::Two, Suits::Clubs);
+        let card3: Card = Card::new(Values::Five, Suits::Clubs);
         let card4: Card = Card::new(Values::Two, Suits::Spades);
-        let card5: Card = Card::new(Values::Four, Suits::Clubs);
+        let card5: Card = Card::new(Values::Five, Suits::Clubs);
 
         let mut x: Vec<Card> = Vec::new();
         x.push(card1);
@@ -50,7 +50,7 @@ mod tests {
     }
 
     #[test]
-    fn is_pair_v3() {
+    fn is_pair_of_king() {
         let card1: Card = Card::new(Values::King, Suits::Clubs);
         let card2: Card = Card::new(Values::Ace, Suits::Clubs);
         let card3: Card = Card::new(Values::Two, Suits::Clubs);
