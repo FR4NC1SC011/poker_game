@@ -3,6 +3,7 @@
 use crate::deck::*;
 use crate::card::*;
 
+// Declare the Poker Hands and how many points they return
 pub enum PokerHands {
     Pair = 1,
     TwoPair = 3,
@@ -17,11 +18,14 @@ pub enum PokerHands {
 
 
 impl PokerHands {
-    pub fn n_of_a_kind(hand: &Deck) -> u16 {
-        //NOTE: Optimize this code
-        //let (mut a, mut b, mut c_c, mut d, mut e, mut f, mut g, mut h, mut i, mut j, mut k, mut l, mut m) = (0, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0, 0, 0);
+    pub fn check_for_n_of_a_kind_fullHouse(hand: &Deck) -> u16 {
+        // Declare a vector of 13 elements
+        // each element represent a card
+        // v[0] = Ace, v[1] = Two, v[2] = Three ... v[13] = King
         let mut v = vec![0; 13];
-        for c in &hand.hand {
+
+        // Count the cards in the Hand
+        for c in &hand.cards {
             match c.value {
                 Values::Ace => {
                     v[0] += 1;
@@ -68,79 +72,96 @@ impl PokerHands {
         let mut n_pairs: u8 = 0;
         let mut three_kind: bool = false;
 
-        let mut points: u16 = 0;
-
+        // Check for Pair, Three of a Kind, Poker or Full House
         for j in v {
             match j {
                 2 => {
+                    // Count how many pairs we got
                     n_pairs += 1;
                  },
                 3 => {
+                    // Is three of a kind
                     three_kind = true;
-                    //points += PokerHands::ThreeOfAKind as u32;
                 },
                 4 => {
+                    // Is Poker
                     println!("Poker");
-                    points += PokerHands::Poker as u16;
+
+                    // Return the points
+                    return PokerHands::Poker as u16;
 
                 },
                 _ => (),
             }
         }
 
+
+        // Return the points of the hand
         if three_kind && n_pairs == 1 {
             println!("Full House");
-            points += PokerHands::FullHouse as u16;
+            return PokerHands::FullHouse as u16;
         } else if three_kind {
             println!("Three Of a Kind");
-            points += PokerHands::ThreeOfAKind as u16;
+            return PokerHands::ThreeOfAKind as u16;
         } else if n_pairs == 2 {
             println!("Two Pairs");
-            points += PokerHands::TwoPair as u16;
+            return PokerHands::TwoPair as u16;
         } else if n_pairs == 1 {
             println!("Pair");
-            points += PokerHands::Pair as u16;
+            return PokerHands::Pair as u16;
+        } else {
+            return 0;
         }
 
-
-        points
     }
 
-    pub fn is_straight(hand: &mut Deck) -> u16 {
+    pub fn check_for_straight_flush_royalFlush(hand: &mut Deck) -> u16 {
 
         let mut flush: bool = true;
         let mut straight = true;
         let mut is_royal = true;
 
-        hand.hand.sort();
+        // Sort the hand cards
+        hand.cards.sort();
 
-        // IS ROYAL STRAIGHT
-        if hand.hand[4].value == Values::King && hand.hand[0].value == Values::Ace {
+        // Check for Royal Straight
+        if hand.cards[4].value == Values::King && hand.cards[0].value == Values::Ace {
             straight = false;
+            // We know the first and last element of the hand
+            // We can avoid them in the for loop
             for i in 2..4 {
-                hand.hand[i].print_card();
-                if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
+                // Check if the vector elements are consecutive
+                // If the elements are not consecutive then royal straight is false
+                if hand.cards[i].value as i32 - hand.cards[i -1].value as i32 != 1 {
                     is_royal = false;
                     break;
                 }
             }
         } else {
             is_royal = false;
+            // Check for Straight
             for i in 1..5 {
-                if hand.hand[i].value as i32 - hand.hand[i -1].value as i32 != 1 {
+                // Check if the vector elements are consecutive
+                // If the elements are not consecutive then straight is false
+                if hand.cards[i].value as i32 - hand.cards[i -1].value as i32 != 1 {
                     straight = false;
                     break;
                 }
             }
         }
 
+            // Suit of the first cards
+            let suit = hand.cards[0].suit;
+            // Check for Flush
             for c in 0..5 {
-                let suit = hand.hand[0].suit;
-                if hand.hand[c].suit != suit {
+                // If the suit of the card is different to the suit of the first card
+                // Then is not Flush
+                if hand.cards[c].suit != suit {
                     flush = false;
                 }
             }
 
+        // Return the points of the hand
         if is_royal && flush {
             return PokerHands::RoyalFlush as u16;
         } else if straight && flush {

@@ -20,10 +20,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 1);
     }
 
@@ -42,10 +42,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 1);
     }
 
@@ -64,10 +64,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 1);
     }
 
@@ -88,10 +88,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 3);
     }
 
@@ -110,10 +110,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 5);
     }
 
@@ -132,10 +132,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 20);
     }
 
@@ -154,10 +154,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::n_of_a_kind(&hand);
+        let points = PokerHands::check_for_n_of_a_kind_fullHouse(&cards);
         assert_eq!(points, 13);
     }
 
@@ -176,10 +176,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 10);
     }
 
@@ -198,10 +198,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 10);
     }
 
@@ -220,10 +220,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 10);
     }
 
@@ -244,10 +244,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 10);
     }
 
@@ -267,10 +267,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 25);
     }
 
@@ -289,10 +289,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 25);
     }
 
@@ -311,10 +311,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 25);
     }
 
@@ -333,10 +333,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 25);
     }
 
@@ -358,10 +358,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 30);
     }
 
@@ -380,10 +380,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 30);
     }
 
@@ -402,10 +402,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 30);
     }
 
@@ -424,10 +424,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 30);
     }
 
@@ -446,10 +446,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 15);
     }
 
@@ -468,10 +468,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 15);
     }
 
@@ -490,10 +490,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 15);
     }
 
@@ -512,10 +512,10 @@ mod tests {
         x.push(card4);
         x.push(card5);
 
-        let mut hand: Deck = Deck { hand: x };
-        println!("{:?}", hand);
+        let mut cards: Deck = Deck { cards: x };
+        println!("{:?}", cards);
 
-        let points = PokerHands::is_straight(&mut hand);
+        let points = PokerHands::check_for_straight_flush_royalFlush(&mut cards);
         assert_eq!(points, 15);
     }
 }

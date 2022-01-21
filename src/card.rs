@@ -1,9 +1,6 @@
 // CARD
-
 use std::fmt;
-//use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
-
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Card {
@@ -35,17 +32,19 @@ pub enum Values {
     Jack = 11,
     Queen = 12,
     King = 13,
-    // NOTE: NO JOKER
+    // NO JOKER
 }
 
 
 impl Card {
+    // Create a new Card
     pub fn new(value: Values, suit: Suits) -> Self {
         let card = Self {value, suit};
 
         card
     }
 
+    // Print the Card
     pub fn print_card(self) {
         println!("{} of {}", self.value, self.suit);
     }
