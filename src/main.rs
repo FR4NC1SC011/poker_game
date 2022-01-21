@@ -87,7 +87,7 @@ fn main() {
 
         let percentage: u32 = (points * 10) as u32;
         if percentage > 0 {
-            money = money + (money_bet/percentage) * 10;
+            money = money + (money_bet/10) * percentage;
         }
 
         score += points;
