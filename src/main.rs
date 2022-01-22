@@ -75,9 +75,10 @@ fn main() {
         // Print the hand
         Deck::print_hand(&hand);
 
+        println!("Cards to change: ");
+
         // Ask the user which cards he wants to change
         // Read user input to vector in the form "%d %d %d ..." -> eg: 1 2 3
-        println!("Cards to change: ");
         let mut cards_to_change: Vec<i32> =
             reader.lock()
                 .lines().next().unwrap().unwrap()
@@ -186,8 +187,10 @@ fn money_bet(money: u32) -> u32 {
         process::exit(1);
     }
 
-    println!("Bet (min 100):");
-    let bet: u32 = read!();
+    println!("Input Bet (min 100):");
+    let bet: u32 = get_input("Input...");
+
+
     if bet < 100 || bet > money {
         println!("Invalid quantity The Bet is 100");
         return 100;
@@ -197,3 +200,51 @@ fn money_bet(money: u32) -> u32 {
     }
 
 }
+
+
+pub fn get_input_u32() -> u32 {
+
+    loop {
+        let mut input = String::new();
+
+        // Reads the input from STDIN and places it in the String named input.
+        io::stdin().read_line(&mut input)
+            .expect("Failed to read input.");
+
+        // Convert to an u32.
+        // If successful, bind to a new variable named input.
+        // If failed, restart the loop.
+          let input: u32 = match input.trim().parse::<u32>() {
+            Ok(parsed_input) => parsed_input,
+              Err(_) => {
+                  println!("Try Again:");
+                  continue
+              },
+        };
+
+
+        return input;
+    }
+}
+
+pub fn get_input<U: std::str::FromStr>(prompt: &str) -> U {
+
+    loop {
+        let mut input = String::new();
+
+        // Reads the input from STDIN and places it in the String named input.
+        println!("{}", prompt);
+        io::stdin().read_line(&mut input)
+            .expect("Failed to read input.");
+
+        // Convert to another type.
+        // If successful, bind to a new variable named input.
+        // If failed, restart the loop.
+        let input = match input.trim().parse::<U>() {
+            Ok(parsed_input) => parsed_input,
+            Err(_) => continue,
+        };
+        return input;
+    }
+}
+
