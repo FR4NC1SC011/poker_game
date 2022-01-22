@@ -1,6 +1,6 @@
 // TESTS FILE
 #[cfg(test)]
-mod tests {
+mod poker_hands_tests {
     use crate::card::*;
     use crate::deck::*;
     use crate::poker_hands::*;

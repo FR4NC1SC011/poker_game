@@ -4,12 +4,11 @@ use crate::poker_hands::*;
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 use std::io::{self, BufRead};
 use std::process;
-use text_io::read;
 
 mod card;
 mod deck;
 mod poker_hands;
-mod tests;
+mod poker_hands_tests;
 
 
 #[macro_use]
@@ -24,7 +23,6 @@ fn main() {
         ).get_matches();
 
 
-    let reader = io::stdin();
 
     // create a new DB with AutoDum, meaning every change is written to the file,
     // and with Json serialization
@@ -54,7 +52,6 @@ fn main() {
             deck = Deck::new();
         }
 
-        // Print the Information
         println!("HighScore: {}", db.get::<u16>("HighScore").unwrap());
         println!("Score: {}", score);
         println!("Money: {}", money);
@@ -65,32 +62,17 @@ fn main() {
         // Subtract the bet from the money
         money = money - money_bet;
 
-
         println!("Money: {}", money);
-
 
         // Create the user hand (5 cards)
         let mut hand: Deck = Deck::new_hand(&mut deck);
 
-        // Print the hand
         Deck::print_hand(&hand);
 
         println!("Cards to change: ");
 
         // Ask the user which cards he wants to change
-        // Read user input to vector in the form "%d %d %d ..." -> eg: 1 2 3
-        let mut cards_to_change: Vec<i32> =
-            reader.lock()
-                .lines().next().unwrap().unwrap()
-                .split(' ').map(|s| s.trim())
-                .filter(|s| !s.is_empty())
-                .map(|s| s.parse().unwrap())
-                .collect();
-
-
-        // The game limits the user to a maximun of 3 changed cards
-        // Truncate the cards_to_change vector to a len of 3
-        cards_to_change.truncate(3);
+        let cards_to_change: Vec<i32> = get_vec_input();
 
         // How many cards the user wants to change
         let n_cards_to_change: u32 = cards_to_change.len() as u32;
@@ -108,7 +90,6 @@ fn main() {
         println!("Total Bet is {}", money_bet);
         println!("Money: {}", money);
 
-        // Print new hand
         Deck::print_hand(&hand);
 
         // Check for Straight, Flush or Royal FLush
@@ -120,17 +101,15 @@ fn main() {
             points = PokerHands::check_for_n_of_a_kind_fullHouse(&hand);
         }
 
-        // TODO: Check this piece of code
-        // Convert the points of the hand
-        let percentage: u32 = (points * 10) as u32;
-        if percentage > 0 {
-            money = money + (money_bet/10) * percentage;
+        let percentage_points: u32 = (points * 10) as u32;
+        // Calculate how much money the user the user earned
+        if percentage_points > 0 {
+            money = money + (money_bet/10) * percentage_points;
         }
 
         // Update Score
         score += points;
 
-        // Print the points of the hand
         println!("Points of the Hand: {}", points);
 
         // Update Highscore
@@ -139,8 +118,8 @@ fn main() {
         }
 
         // Ask the user if wants to keep playing
-        println!("Keep Playing? yes/no");
-        let play: String = read!("{}\n");
+        //let play: String = read!("{}\n");
+        let play: String = get_input("Keep Playing? [Yes]/no");
         if play == "no" {
             println!("Thanks for playing");
             break;
@@ -152,6 +131,7 @@ fn main() {
 
 
 }
+
 
 pub fn load_or_new_db(db_name: &str) -> PickleDb {
     let load = PickleDb::load(
@@ -201,32 +181,7 @@ fn money_bet(money: u32) -> u32 {
 
 }
 
-
-pub fn get_input_u32() -> u32 {
-
-    loop {
-        let mut input = String::new();
-
-        // Reads the input from STDIN and places it in the String named input.
-        io::stdin().read_line(&mut input)
-            .expect("Failed to read input.");
-
-        // Convert to an u32.
-        // If successful, bind to a new variable named input.
-        // If failed, restart the loop.
-          let input: u32 = match input.trim().parse::<u32>() {
-            Ok(parsed_input) => parsed_input,
-              Err(_) => {
-                  println!("Try Again:");
-                  continue
-              },
-        };
-
-
-        return input;
-    }
-}
-
+// Get user input
 pub fn get_input<U: std::str::FromStr>(prompt: &str) -> U {
 
     loop {
@@ -248,3 +203,19 @@ pub fn get_input<U: std::str::FromStr>(prompt: &str) -> U {
     }
 }
 
+// Get user input in the form of a vector
+pub fn get_vec_input() -> Vec<i32> {
+    let reader = io::stdin();
+
+    let v: Vec<i32> =
+        reader.lock()
+            .lines().next().unwrap().unwrap()
+            .split(' ').map(|s| s.trim())
+            .filter(|s| !s.is_empty())
+            .map(|s| s.parse().unwrap())
+            .collect();
+
+
+    v
+
+}
