@@ -1,5 +1,3 @@
-// HANDS
-
 use crate::deck::*;
 use crate::card::*;
 
