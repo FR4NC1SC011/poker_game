@@ -67,10 +67,8 @@ fn main() {
 
         Deck::print_hand(&hand);
 
-        println!("Cards to change: ");
-
         // Ask the user which cards he wants to change
-        let cards_to_change: Vec<i32> = get_vec_input();
+        let cards_to_change: Vec<i32> = get_vec_input("Index of the Cards to Change: (Separated by Space eg: 1 2)");
 
         // How many cards the user wants to change
         let n_cards_to_change: u32 = cards_to_change.len() as u32;

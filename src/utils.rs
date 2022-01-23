@@ -99,18 +99,18 @@ pub fn get_input<U: std::str::FromStr>(prompt: &str) -> U {
 }
 
 // Get user input in the form of a vector
-pub fn get_vec_input() -> Vec<i32> {
+pub fn get_vec_input(prompt: &str) -> Vec<i32> {
     let reader = io::stdin();
 
-    let v: Vec<i32> =
-        reader.lock()
-            .lines().next().unwrap().unwrap()
-            .split(' ').map(|s| s.trim())
-            .filter(|s| !s.is_empty())
-            .map(|s| s.parse().unwrap())
-            .collect();
+    println!("{}", prompt);
 
+    let v: Vec<i32> =
+        reader.lock()                           // We take a lock of the stdin which lets you work with stdin as a buffered reader
+            .lines().next().unwrap().unwrap()   // Read the next line
+            .split(' ').map(|s| s.trim())       // Then we split it by spaces and trim resulting chunks from extra whitespace
+            .filter(|s| !s.is_empty())          // Remove empty chunks which were left after trimming
+            .map(|s| s.parse().unwrap())        // Convert strings to i32
+            .collect();                         // Collect the result to a vector
 
     v
-
 }
