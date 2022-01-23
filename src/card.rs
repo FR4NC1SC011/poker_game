@@ -55,10 +55,17 @@ impl Card {
 impl fmt::Display for Suits {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
        match *self {
+           /*
            Suits::Clubs => write!(f, "♣"),
            Suits::Hearts => write!(f, "♥"),
            Suits::Spades => write!(f, "♠"),
            Suits::Diamonds => write!(f, "♦"),
+           */
+           Suits::Clubs => write!(f, "Clubs"),
+           Suits::Hearts => write!(f, "Hearts"),
+           Suits::Spades => write!(f, "Spades"),
+           Suits::Diamonds => write!(f, "Diamonds"),
+
        }
     }
 }

@@ -99,9 +99,8 @@ fn main() {
             points = PokerHands::check_for_n_of_a_kind_fullHouse(&hand);
         }
 
-
-        let percentage_points: u32 = (points * 10) as u32;
         // Calculate how much money the user the user earned
+        let percentage_points: u32 = (points * 10) as u32;
         if percentage_points > 0 {
             money = money + (money_bet/10) * percentage_points;
         }
