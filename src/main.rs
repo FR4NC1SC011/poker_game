@@ -116,7 +116,7 @@ fn main() {
         // Ask the user if wants to keep playing
         //let play: String = read!("{}\n");
         let play: String = get_input("Keep Playing? [Yes]/no");
-        if play == "no" {
+        if play == "no" || play == "No" {
             println!("Thanks for playing");
             break;
         }

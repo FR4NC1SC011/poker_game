@@ -11,9 +11,12 @@ pub fn load_or_new_db(db_name: &str) -> PickleDb {
     let load = PickleDb::load(
                             db_name,
                             PickleDbDumpPolicy::AutoDump,
-                            SerializationMethod::Json);
+                            SerializationMethod::Bin);
     return match load {
+        // Return DB
         Ok(load) => load,
+
+        // If DB doesn't exist create one
         Err(_) => {
             create_db(db_name)
         }
@@ -25,11 +28,11 @@ pub fn load_or_new_db(db_name: &str) -> PickleDb {
 // Create a new DB
 pub fn create_db(db_name: &str) -> PickleDb {
     // create a new DB with AutoDump (meaning every change is written to the file)
-    // and with Json serialization (meaning DB will be dumped to file as a Json object)
+    // and with Json serialization (meaning DB will be dumped to file as a BIN object)
     let mut new_db = PickleDb::new(
         db_name,
         PickleDbDumpPolicy::AutoDump,
-        SerializationMethod::Json,
+        SerializationMethod::Bin,
     );
 
     // set the value 0 to the key 'HighScore'
